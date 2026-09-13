@@ -1,0 +1,2 @@
+import {sqliteTable,text,integer,index} from 'drizzle-orm/sqlite-core';
+export const products=sqliteTable('products',{id:text('id').primaryKey(),name:text('name').notNull(),description:text('description').notNull().default(''),price:integer('price'),variants:text('variants').notNull().default(''),status:text('status').notNull().default('order'),published:integer('published').notNull().default(0),image:text('image').notNull().default(''),sort:integer('sort').notNull().default(0)},t=>[index('products_visibility_order').on(t.published,t.sort)]);
