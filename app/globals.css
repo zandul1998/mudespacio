@@ -6,3 +6,35 @@
 @media(max-width:900px){.wrap{width:calc(100% - 48px)}.hero{gap:20px}.art-paper{min-height:450px;padding-inline:25px}.art-title{font-size:72px}.pot{width:175px;height:145px}.about{gap:45px}.section-heading{gap:35px}.payment-options{max-width:220px}.footer{flex-wrap:wrap}.section{padding-block:70px}.catalog-empty{flex-wrap:wrap}.catalog-empty .button{margin-left:0}.products{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.wrap{width:calc(100% - 40px)}.announcement{font-size:9px;letter-spacing:.3px}.header{padding-block:23px;flex-wrap:wrap;gap:24px}.header .logo{font-size:39px}.header nav{order:3;width:100%;justify-content:center;border-top:1px solid #244d401c;padding-top:15px;gap:35px}.hero{grid-template-columns:1fr;padding-block:40px 50px;gap:25px}.hero h1{font-size:60px;letter-spacing:-3px}.eyebrow{font-size:9px;letter-spacing:1.4px}.intro{font-size:14px}.art{max-width:400px;width:100%;margin:auto;padding-inline:20px}.art-paper{min-height:460px}.art-title{font-size:86px}.sticker{right:0}.spark{left:0;font-size:55px}.ribbon{justify-content:flex-start}.about,.section-heading{grid-template-columns:1fr;gap:20px}.about-copy{max-width:none}.section{padding-block:58px}h2{font-size:48px;letter-spacing:-2px}.little-flower{display:none}.steps{grid-template-columns:1fr;gap:20px;margin-top:15px}.steps article{border-bottom:1px solid #faf3e326;padding-bottom:14px}.steps p{max-width:none}.steps h3{margin:8px 0}.payment{flex-wrap:wrap;gap:16px}.payment-options{margin-left:0;max-width:none;width:100%;gap:7px}.payment-options span{font-size:11px;padding:8px 13px}.contact h2{font-size:63px}.contact h2 span{font-size:45px}.footer{display:grid;grid-template-columns:1fr 1fr;gap:25px}.footer .logo{justify-self:start}.button{gap:20px;padding-inline:20px}.products{grid-template-columns:1fr}.catalog-empty{padding:25px;gap:18px}.admin-form{grid-template-columns:1fr;padding:20px}.admin-form .wide{grid-column:auto}.admin-top{align-items:flex-start;flex-direction:column}.admin-item{gap:12px;padding:12px}.admin-item img{width:45px;height:45px}.admin h1{font-size:40px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button{transition:none}}
+
+/* Action improvements */
+.button:active{transform:translateY(0)}
+.mobile-contact{display:none}
+.admin-actions{justify-content:space-between;align-items:center}
+.compact{padding:10px 16px}
+.secondary:hover{background:var(--green);color:var(--cream)}
+.feedback-slot{min-height:1px}
+.editor-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;border-bottom:1px solid #244d4024;padding-bottom:16px}
+.editor-heading .eyebrow{margin-bottom:5px}
+.editor-heading h2{font-size:30px;margin:0}
+.save-actions{position:sticky;bottom:12px;align-items:center;background:#fffaf0;border-top:1px solid #244d4033;padding:16px 0 4px;z-index:2}
+.unsaved{color:var(--orange);font-weight:700}
+.saved,.admin-status.published{color:var(--green)}
+.admin-status{font-weight:700}
+.admin-status.draft{color:#765d49}
+.admin-item{transition:border-color .2s,background .2s}
+.admin-item:hover{border-color:#244d4080;background:#fffaf0}
+.admin-loading{display:flex;align-items:center;gap:10px;font-size:13px}
+.admin-loading span{width:16px;height:16px;border:2px solid #244d4040;border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:620px){
+ body{padding-bottom:76px}
+ .mobile-contact{position:fixed;display:flex;align-items:center;justify-content:center;gap:9px;left:16px;right:16px;bottom:12px;min-height:52px;padding:12px 18px;background:var(--orange);color:var(--cream);border-radius:6px;box-shadow:0 8px 28px #244d4050;font-size:14px;font-weight:700;z-index:20}
+ .mobile-contact:active{transform:translateY(1px)}
+ .admin{padding-bottom:20px}
+ .admin .admin-actions{align-items:stretch}
+ .admin .admin-actions .button{flex:1;padding-inline:12px}
+ .editor-heading{align-items:flex-start;flex-direction:column}
+ .save-actions{bottom:76px;margin-inline:-20px;padding:14px 20px;background:#fffaf0;box-shadow:0 -8px 24px #244d4014}
+}
+@media(prefers-reduced-motion:reduce){.admin-loading span{animation:none}}
