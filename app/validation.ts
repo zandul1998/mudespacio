@@ -13,3 +13,11 @@ if(p.published!==0&&p.published!==1)throw new TypeError('Visibilidad inválida.'
 return {id,name,description,variants,image,status,price:p.price as number|null,sort:p.sort as number,published:p.published as number};
 }
 export function imageType(bytes:Uint8Array){if(bytes.length<12)return null;if(bytes[0]===255&&bytes[1]===216&&bytes[2]===255)return {ext:'jpg',mime:'image/jpeg'};if([137,80,78,71,13,10,26,10].every((v,i)=>bytes[i]===v))return {ext:'png',mime:'image/png'};if(String.fromCharCode(...bytes.slice(0,4))==='RIFF'&&String.fromCharCode(...bytes.slice(8,12))==='WEBP')return {ext:'webp',mime:'image/webp'};return null}
+export function validateSchedule(value:unknown){
+if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('Datos inválidos.');
+const p=value as Record<string,unknown>;const str=(key:string,max:number)=>{if(typeof p[key]!=='string'||(p[key] as string).length>max)throw new TypeError('Revisá el campo '+key+'.');return (p[key] as string).trim()};
+const id=str('id',36);if(id&&!/^[0-9a-f-]{36}$/.test(id))throw new TypeError('Horario inválido.');
+const start=str('start',5),end=str('end',5),status=str('status',20),note=str('note',160);if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(start)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(end)||start>=end)throw new TypeError('Revisá el horario de inicio y fin.');
+if(!Number.isInteger(p.day)||(p.day as number)<0||(p.day as number)>6)throw new TypeError('Elegí un día.');if(!['open','last','full','forming'].includes(status))throw new TypeError('Elegí un estado.');
+if(!Number.isSafeInteger(p.sort)||(p.sort as number)<0||(p.sort as number)>9999)throw new TypeError('El orden debe estar entre 0 y 9999.');if(p.published!==0&&p.published!==1)throw new TypeError('Visibilidad inválida.');
+return {id,day:p.day as number,start,end,status,note,sort:p.sort as number,published:p.published as number};}
