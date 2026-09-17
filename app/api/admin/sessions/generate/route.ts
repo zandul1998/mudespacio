@@ -7,7 +7,8 @@ export async function POST(request:Request){
     const body=await request.json() as {period?:string;skip_dates?:string[];published_only?:boolean};
     const period=(body.period||'').trim();
     if(!/^\d{4}-\d{2}$/.test(period))return Response.json({error:'Elegí un mes válido.'},{status:400});
-    const skip=new Set((body.skip_dates||[]).filter(validDate));
+    const {results:closures}=await bindings().DB.prepare('SELECT date FROM closure_days WHERE date LIKE ?').bind(period+'%').all<{date:string}>();
+    const skip=new Set([...closures.map(c=>c.date),...(body.skip_dates||[]).filter(validDate)]);
     const [year,month]=period.split('-').map(Number),db=bindings().DB,now=new Date().toISOString();
     const {results:schedules}=await db.prepare(`${body.published_only===false?'SELECT id,day FROM schedules':'SELECT id,day FROM schedules WHERE published=1'} ORDER BY day,start`).all<{id:string;day:number}>();
     let created=0,skipped=0;

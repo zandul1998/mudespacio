@@ -57,6 +57,13 @@
       "when": 1789900000000,
       "tag": "0007_unique_class_sessions",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1789980000000,
+      "tag": "0008_recovery_capacity_closures",
+      "breakpoints": true
     }
   ]
 }
