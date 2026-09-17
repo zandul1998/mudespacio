@@ -1,7 +1,7 @@
 import {bindings} from '../../../server';
-import {availableFrom,requirePortalStudent} from '../_auth';
+import {availableFrom,ensureStudentPeriodSessions,requirePortalStudent} from '../_auth';
 const scheduleLabel="(CASE s.day WHEN 1 THEN 'Lunes' WHEN 2 THEN 'Martes' WHEN 3 THEN 'Miércoles' WHEN 4 THEN 'Jueves' WHEN 5 THEN 'Viernes' WHEN 6 THEN 'Sábado' ELSE 'Domingo' END || ' ' || s.start || '-' || s.end)";
-export async function GET(request:Request){const student=await requirePortalStudent(request);if(student instanceof Response)return student;const url=new URL(request.url),period=(url.searchParams.get('period')||new Date().toISOString().slice(0,7));const db=bindings().DB;const {results:myClasses}=await db.prepare(`SELECT cs.id,cs.date,s.start,s.end,s.capacity,${scheduleLabel} AS schedule_label,st.name AS teacher_name,ar.status AS attendance_status,ar.credit_id
+export async function GET(request:Request){const student=await requirePortalStudent(request);if(student instanceof Response)return student;const url=new URL(request.url),period=(url.searchParams.get('period')||new Date().toISOString().slice(0,7));const db=bindings().DB;await ensureStudentPeriodSessions(student.id,period);const {results:myClasses}=await db.prepare(`SELECT cs.id,cs.date,s.start,s.end,s.capacity,${scheduleLabel} AS schedule_label,st.name AS teacher_name,ar.status AS attendance_status,ar.credit_id
 FROM class_sessions cs JOIN schedules s ON s.id=cs.schedule_id JOIN student_schedules ss ON ss.schedule_id=s.id LEFT JOIN staff_members st ON st.id=s.teacher_id LEFT JOIN attendance_records ar ON ar.session_id=cs.id AND ar.student_id=ss.student_id
 WHERE ss.student_id=? AND cs.date LIKE ? AND cs.status!='cancelled' ORDER BY cs.date,s.start`).bind(student.id,period+'%').all();
 const {results:credits}=await db.prepare("SELECT * FROM recovery_credits WHERE student_id=? AND status IN ('available','reserved') ORDER BY expires_at").bind(student.id).all();
