@@ -2,6 +2,7 @@ import {requireChatGPTUser} from '../chatgpt-auth';
 import {getWorkshopAccess,listRecoveryCredits,listSchedules,listStaffMembers,listStaffPayments,listStudentPayments,listStudents,listTeamMembers,listWaitlistEntries,listWorkshopExpenses} from '../server';
 import {creditStatusLabels,dayLabels,rolePermissionNotes,scheduleStatusLabels,staffKindLabels,teamRoleLabels,waitlistStatusLabels,type ScheduleStatus} from '../shared';
 import AssistantHours from './AssistantHours';
+import AttendanceSheet from './AttendanceSheet';
 
 export const dynamic='force-dynamic';
 const statusOrder:ScheduleStatus[]=['open','last','forming','full'];
@@ -22,6 +23,7 @@ export default async function MiTaller(){
   <section className="workshop-layout">
     <div className="workshop-main">
       {(access.role==='assistant'||access.role==='admin')&&<AssistantHours/>}
+      <AttendanceSheet readOnly={access.role==='readonly'}/>
       <section className="workshop-panel today-panel"><div><p className="eyebrow">HOY</p><h2>{dayLabels[todayDay]}</h2><p>{today.length?'Estos son los grupos cargados para hoy.':'No hay grupos cargados para hoy.'}</p></div><div className="workshop-schedule">{today.length?today.map(s=><article key={s.id}><div><strong>{s.start} a {s.end}</strong><p>{s.note||'Sin nota interna todavía'}</p></div><span className={'tone-'+statusTone[s.status]}>{scheduleStatusLabels[s.status]}</span></article>):<p className="workshop-empty">Podés usar este espacio para ver clases del día, asistencia y pendientes cuando sumemos alumnos.</p>}</div></section>
       <section className="workshop-panel"><div><p className="eyebrow">SEMANA</p><h2>Grilla operativa</h2><p>Vista interna de horarios con profe asignada y cantidad de alumnas vinculadas.</p></div><div className="workshop-days">{groups.map(([day,slots])=><article key={day}><h3>{dayLabels[Number(day)]}</h3>{slots!.map(s=><div className="workshop-row" key={s.id}><div><strong>{s.start} a {s.end}</strong><p>{s.teacher_name||'Sin profe'} · {s.student_count||0} alumna(s){s.note?' · '+s.note:''}</p></div><span className={'tone-'+statusTone[s.status]}>{scheduleStatusLabels[s.status]}</span></div>)}</article>)}</div></section>
     </div>
