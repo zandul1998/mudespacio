@@ -64,6 +64,13 @@
       "when": 1789980000000,
       "tag": "0008_recovery_capacity_closures",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1790060000000,
+      "tag": "0009_student_portal_login_calendar",
+      "breakpoints": true
     }
   ]
 }

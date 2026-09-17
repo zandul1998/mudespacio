@@ -36,10 +36,11 @@ export function validateStudent(value:unknown){
 if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('Datos inválidos.');
 const p=value as Record<string,unknown>;const str=(key:string,max:number)=>{if(typeof p[key]!=='string'||(p[key] as string).length>max)throw new TypeError('Revisá el campo '+key+'.');return (p[key] as string).trim()};
 const id=str('id',36);if(id&&!/^[0-9a-f-]{36}$/.test(id))throw new TypeError('Alumna inválida.');
-const name=str('name',120),contact=str('contact',80),email=str('email',180).toLowerCase(),instagram=str('instagram',80),family_group=str('family_group',120),status=str('status',20),notes=str('notes',1200);
+const name=str('name',120),contact=str('contact',80),email=str('email',180).toLowerCase(),instagram=str('instagram',80),family_group=str('family_group',120),status=str('status',20),notes=str('notes',1200),portal_password=typeof p.portal_password==='string'?(p.portal_password as string):'';
 if(!name)throw new TypeError('Completá el nombre.');if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new TypeError('Ingresá un mail válido.');if(!['active','paused','interested','inactive'].includes(status))throw new TypeError('Elegí un estado.');
+if(portal_password&&portal_password.length<6)throw new TypeError('La contraseña del portal debe tener al menos 6 caracteres.');
 const schedule_ids=Array.isArray(p.schedule_ids)?p.schedule_ids.filter(v=>typeof v==='string'&&/^[0-9a-f-]{36}$/.test(v as string)) as string[]:[];
-return {id,name,contact,email,instagram,family_group,status:status as 'active'|'paused'|'interested'|'inactive',notes,schedule_ids:[...new Set(schedule_ids)]};
+return {id,name,contact,email,instagram,family_group,status:status as 'active'|'paused'|'interested'|'inactive',notes,schedule_ids:[...new Set(schedule_ids)],portal_password};
 }
 export function validateStaffMember(value:unknown){
 if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('Datos inválidos.');
