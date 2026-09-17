@@ -22,6 +22,34 @@
       "when": 1789521183142,
       "tag": "0002_crazy_starfox",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1789580000000,
+      "tag": "0003_phase_one_workshop",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1789660000000,
+      "tag": "0004_attendance_recoveries",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1789740000000,
+      "tag": "0005_finance_controls",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1789820000000,
+      "tag": "0006_student_portal",
+      "breakpoints": true
     }
   ]
 }
