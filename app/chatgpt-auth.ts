@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { env } from "cloudflare:workers";
 
 export type ChatGPTUser = {
   userId: string;
@@ -22,7 +23,11 @@ export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const requestHeaders = await headers();
   const userId = requestHeaders.get(USER_ID_HEADER);
   const email = requestHeaders.get(USER_EMAIL_HEADER);
-  if (!userId || !email) return null;
+  if (!userId || !email) {
+    const localUser = localDevelopmentUser(requestHeaders);
+    if (localUser) return localUser;
+    return null;
+  }
 
   const encodedFullName = requestHeaders.get(USER_FULL_NAME_HEADER);
   const fullName =
@@ -36,6 +41,21 @@ export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
     displayName: fullName ?? email,
     email,
     fullName,
+  };
+}
+
+function localDevelopmentUser(requestHeaders: Headers): ChatGPTUser | null {
+  const host = requestHeaders.get("host") || "";
+  if (!host.startsWith("localhost:") && !host.startsWith("127.0.0.1:")) {
+    return null;
+  }
+  const email = (env as unknown as { ADMIN_EMAIL?: string }).ADMIN_EMAIL?.trim();
+  if (!email) return null;
+  return {
+    userId: "local-dev-admin",
+    displayName: email,
+    email,
+    fullName: null,
   };
 }
 
