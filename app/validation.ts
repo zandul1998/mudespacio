@@ -21,3 +21,12 @@ const start=str('start',5),end=str('end',5),status=str('status',20),note=str('no
 if(!Number.isInteger(p.day)||(p.day as number)<0||(p.day as number)>6)throw new TypeError('Elegí un día.');if(!['open','last','full','forming'].includes(status))throw new TypeError('Elegí un estado.');
 if(!Number.isSafeInteger(p.sort)||(p.sort as number)<0||(p.sort as number)>9999)throw new TypeError('El orden debe estar entre 0 y 9999.');if(p.published!==0&&p.published!==1)throw new TypeError('Visibilidad inválida.');
 return {id,day:p.day as number,start,end,status,note,sort:p.sort as number,published:p.published as number};}
+export function validateTeamMember(value:unknown){
+if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('Datos inválidos.');
+const p=value as Record<string,unknown>;const str=(key:string,max:number)=>{if(typeof p[key]!=='string'||(p[key] as string).length>max)throw new TypeError('Revisá el campo '+key+'.');return (p[key] as string).trim()};
+const id=str('id',36);if(id&&!/^[0-9a-f-]{36}$/.test(id))throw new TypeError('Acceso inválido.');
+const email=str('email',180).toLowerCase(),name=str('name',100),role=str('role',20);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new TypeError('Ingresá un mail válido.');
+if(!['admin','team','readonly'].includes(role))throw new TypeError('Elegí un rol.');
+if(p.active!==0&&p.active!==1)throw new TypeError('Estado inválido.');
+return {id,email,name,role:role as 'admin'|'team'|'readonly',active:p.active as number};
+}
